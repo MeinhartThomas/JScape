@@ -112,12 +112,15 @@ class GameScene: SKScene {
         lowerTorso.physicsBody = SKPhysicsBody(texture: lowerTorso.texture!, size: lowerTorso.size)
         lowerTorso.physicsBody?.affectedByGravity = false
         lowerTorso.physicsBody?.isDynamic = false
+        lowerTorso.physicsBody?.categoryBitMask = 0
+        lowerTorso.physicsBody?.collisionBitMask = 1
         
         upperTorso = lowerTorso.childNode(withName: "torso_upper") as! SKSpriteNode
         upperTorso.physicsBody = SKPhysicsBody(texture: upperTorso.texture!, size: upperTorso.size)
         upperTorso.physicsBody?.affectedByGravity = false
         upperTorso.physicsBody?.isDynamic = false
-        
+        upperTorso.physicsBody?.categoryBitMask = 0
+        upperTorso.physicsBody?.collisionBitMask = 1
 
         lowerTorso.position = CGPoint(x: -100, y: -75)
 
@@ -132,16 +135,18 @@ class GameScene: SKScene {
         upperArmFront.physicsBody = SKPhysicsBody(texture: upperArmFront.texture!, size: upperArmFront.size)
         upperArmFront.physicsBody?.affectedByGravity = false
         upperArmFront.physicsBody?.isDynamic = false
+        upperArmFront.physicsBody?.categoryBitMask = 0
+        upperArmFront.physicsBody?.collisionBitMask = 1
         
         lowerArmFront = upperArmFront.childNode(withName: "arm_lower_front") as! SKSpriteNode
         lowerArmFront.physicsBody = SKPhysicsBody(texture: lowerArmFront.texture!, size: lowerArmFront.size)
         lowerArmFront.physicsBody?.affectedByGravity = false
         lowerArmFront.physicsBody?.isDynamic = false
+        lowerArmFront.physicsBody?.categoryBitMask = 0
+        lowerArmFront.physicsBody?.collisionBitMask = 1
+        lowerArmFront.reachConstraints = rotationConstraintArm
         
         fistFront = lowerArmFront.childNode(withName: "fist_front")
-        
-        
-        lowerArmFront.reachConstraints = rotationConstraintArm
         
         
         //ARM BACK
@@ -149,17 +154,18 @@ class GameScene: SKScene {
         upperArmBack.physicsBody = SKPhysicsBody(texture: upperArmBack.texture!, size: upperArmBack.size)
         upperArmBack.physicsBody?.affectedByGravity = false
         upperArmBack.physicsBody?.isDynamic = false
+        upperArmBack.physicsBody?.categoryBitMask = 0
+        upperArmBack.physicsBody?.collisionBitMask = 1
         
         lowerArmBack = upperArmBack.childNode(withName: "arm_lower_back") as! SKSpriteNode
         lowerArmBack.physicsBody = SKPhysicsBody(texture: lowerArmBack.texture!, size: lowerArmBack.size)
         lowerArmBack.physicsBody?.affectedByGravity = false
         lowerArmBack.physicsBody?.isDynamic = false
-        
+        lowerArmBack.physicsBody?.categoryBitMask = 0
+        lowerArmBack.physicsBody?.collisionBitMask = 1
+        lowerArmBack.reachConstraints = rotationConstraintArm
         
         fistBack = lowerArmBack.childNode(withName: "fist_back")
-        
-        
-        lowerArmBack.reachConstraints = rotationConstraintArm
         
         
         //HEAD
@@ -167,7 +173,8 @@ class GameScene: SKScene {
         head.physicsBody = SKPhysicsBody(texture: head.texture!, size: head.size)
         head.physicsBody?.affectedByGravity = false
         head.physicsBody?.isDynamic = false
-        
+        head.physicsBody?.categoryBitMask = 0
+        head.physicsBody?.collisionBitMask = 1
         
         
         //LEG FRONT
@@ -175,12 +182,15 @@ class GameScene: SKScene {
         legUpperFront.physicsBody = SKPhysicsBody(texture: legUpperFront.texture!, size: legUpperFront.size)
         legUpperFront.physicsBody?.affectedByGravity = false
         legUpperFront.physicsBody?.isDynamic = false
+        legUpperFront.physicsBody?.categoryBitMask = 0
+        legUpperFront.physicsBody?.collisionBitMask =1
         
         legUpperBack = lowerTorso.childNode(withName: "leg_upper_back") as! SKSpriteNode
         legUpperBack.physicsBody = SKPhysicsBody(texture: legUpperBack.texture!, size: legUpperBack.size)
         legUpperBack.physicsBody?.affectedByGravity = false
         legUpperBack.physicsBody?.isDynamic = false
-        
+        legUpperBack.physicsBody?.categoryBitMask = 0
+        legUpperBack.physicsBody?.collisionBitMask = 1
         
         
         //LEG BACK
@@ -188,11 +198,15 @@ class GameScene: SKScene {
         legLowerFront.physicsBody = SKPhysicsBody(texture: legLowerFront.texture!, size: legLowerFront.size)
         legLowerFront.physicsBody?.affectedByGravity = false
         legLowerFront.physicsBody?.isDynamic = false
+        legLowerFront.physicsBody?.categoryBitMask = 0
+        legLowerFront.physicsBody?.collisionBitMask = 1
         
         legLowerBack = legUpperBack.childNode(withName: "leg_lower_back") as! SKSpriteNode
         legLowerBack.physicsBody = SKPhysicsBody(texture: legLowerBack.texture!, size: legLowerBack.size)
         legLowerBack.physicsBody?.affectedByGravity = false
         legLowerBack.physicsBody?.isDynamic = false
+        legLowerBack.physicsBody?.categoryBitMask = 0
+        legLowerBack.physicsBody?.collisionBitMask = 1
 
     }
     
@@ -264,6 +278,8 @@ class GameScene: SKScene {
         woodenBox.physicsBody = SKPhysicsBody(texture: woodenBox.texture!, size: woodenBox.size)
         woodenBox.physicsBody?.affectedByGravity = false
         woodenBox.physicsBody?.isDynamic = false
+        woodenBox.physicsBody?.categoryBitMask = 1
+        woodenBox.physicsBody?.collisionBitMask = 0
         woodenBox.name = ("wooden_box")
         woodenBox.zPosition = -4
         woodenBox?.position = CGPoint(x: 100, y: -146)
