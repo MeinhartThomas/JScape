@@ -22,7 +22,7 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let backgroundSound = SKAudioNode(fileNamed: "bg.mp3")
     
@@ -58,6 +58,7 @@ class GameScene: SKScene {
 
     //OBSTACLES
     var woodenBox: SKSpriteNode!
+    
    
     
     
@@ -69,8 +70,14 @@ class GameScene: SKScene {
     var isSliding = false
     
 
-    //industrial or mountain
-    let designPack = "mountain"
+    //industrial or mountain or city
+    let designPack = "city"
+    
+    enum bodyType: UInt32 {
+        case ground = 1
+        case ninja = 2
+        case obstacle = 3
+    }
     
     
     override func sceneDidLoad() {
@@ -85,6 +92,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        physicsWorld.contactDelegate = self
         
         createBackground()
         createMovingLayers()
@@ -92,6 +100,10 @@ class GameScene: SKScene {
         startRunningAnimation()
         createBox()
         createGestureRecognizers()
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        print("contact")
     }
     
     func createGestureRecognizers(){
@@ -112,17 +124,17 @@ class GameScene: SKScene {
         lowerTorso.physicsBody = SKPhysicsBody(texture: lowerTorso.texture!, size: lowerTorso.size)
         lowerTorso.physicsBody?.affectedByGravity = false
         lowerTorso.physicsBody?.isDynamic = false
-        lowerTorso.physicsBody?.categoryBitMask = 0
-        lowerTorso.physicsBody?.collisionBitMask = 1
+        lowerTorso.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        lowerTorso.physicsBody?.collisionBitMask = bodyType.ground.rawValue
+        lowerTorso.position = CGPoint(x: -100 , y: -43)
+        lowerTorso.setScale(0.4)
         
         upperTorso = lowerTorso.childNode(withName: "torso_upper") as! SKSpriteNode
         upperTorso.physicsBody = SKPhysicsBody(texture: upperTorso.texture!, size: upperTorso.size)
         upperTorso.physicsBody?.affectedByGravity = false
         upperTorso.physicsBody?.isDynamic = false
-        upperTorso.physicsBody?.categoryBitMask = 0
-        upperTorso.physicsBody?.collisionBitMask = 1
-
-        lowerTorso.position = CGPoint(x: -100, y: -75)
+        upperTorso.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        upperTorso.physicsBody?.collisionBitMask = bodyType.ground.rawValue
 
         
         //ARM CONSTRAINTS
@@ -135,16 +147,18 @@ class GameScene: SKScene {
         upperArmFront.physicsBody = SKPhysicsBody(texture: upperArmFront.texture!, size: upperArmFront.size)
         upperArmFront.physicsBody?.affectedByGravity = false
         upperArmFront.physicsBody?.isDynamic = false
-        upperArmFront.physicsBody?.categoryBitMask = 0
-        upperArmFront.physicsBody?.collisionBitMask = 1
+        upperArmFront.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        upperArmFront.physicsBody?.collisionBitMask = bodyType.ground.rawValue
+        
         
         lowerArmFront = upperArmFront.childNode(withName: "arm_lower_front") as! SKSpriteNode
         lowerArmFront.physicsBody = SKPhysicsBody(texture: lowerArmFront.texture!, size: lowerArmFront.size)
         lowerArmFront.physicsBody?.affectedByGravity = false
         lowerArmFront.physicsBody?.isDynamic = false
-        lowerArmFront.physicsBody?.categoryBitMask = 0
-        lowerArmFront.physicsBody?.collisionBitMask = 1
+        lowerArmFront.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        lowerArmFront.physicsBody?.collisionBitMask = bodyType.ground.rawValue
         lowerArmFront.reachConstraints = rotationConstraintArm
+        //lowerArmFront.setScale(0.6)
         
         fistFront = lowerArmFront.childNode(withName: "fist_front")
         
@@ -154,15 +168,16 @@ class GameScene: SKScene {
         upperArmBack.physicsBody = SKPhysicsBody(texture: upperArmBack.texture!, size: upperArmBack.size)
         upperArmBack.physicsBody?.affectedByGravity = false
         upperArmBack.physicsBody?.isDynamic = false
-        upperArmBack.physicsBody?.categoryBitMask = 0
-        upperArmBack.physicsBody?.collisionBitMask = 1
+        upperArmBack.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        upperArmBack.physicsBody?.collisionBitMask = bodyType.ground.rawValue
+        
         
         lowerArmBack = upperArmBack.childNode(withName: "arm_lower_back") as! SKSpriteNode
         lowerArmBack.physicsBody = SKPhysicsBody(texture: lowerArmBack.texture!, size: lowerArmBack.size)
         lowerArmBack.physicsBody?.affectedByGravity = false
         lowerArmBack.physicsBody?.isDynamic = false
-        lowerArmBack.physicsBody?.categoryBitMask = 0
-        lowerArmBack.physicsBody?.collisionBitMask = 1
+        lowerArmBack.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        lowerArmBack.physicsBody?.collisionBitMask = bodyType.ground.rawValue
         lowerArmBack.reachConstraints = rotationConstraintArm
         
         fistBack = lowerArmBack.childNode(withName: "fist_back")
@@ -173,8 +188,9 @@ class GameScene: SKScene {
         head.physicsBody = SKPhysicsBody(texture: head.texture!, size: head.size)
         head.physicsBody?.affectedByGravity = false
         head.physicsBody?.isDynamic = false
-        head.physicsBody?.categoryBitMask = 0
-        head.physicsBody?.collisionBitMask = 1
+        head.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        head.physicsBody?.collisionBitMask = bodyType.ground.rawValue
+        //head.setScale(0.6)
         
         
         //LEG FRONT
@@ -182,15 +198,17 @@ class GameScene: SKScene {
         legUpperFront.physicsBody = SKPhysicsBody(texture: legUpperFront.texture!, size: legUpperFront.size)
         legUpperFront.physicsBody?.affectedByGravity = false
         legUpperFront.physicsBody?.isDynamic = false
-        legUpperFront.physicsBody?.categoryBitMask = 0
-        legUpperFront.physicsBody?.collisionBitMask =1
+        legUpperFront.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        legUpperFront.physicsBody?.collisionBitMask = bodyType.ground.rawValue
+
         
         legUpperBack = lowerTorso.childNode(withName: "leg_upper_back") as! SKSpriteNode
         legUpperBack.physicsBody = SKPhysicsBody(texture: legUpperBack.texture!, size: legUpperBack.size)
         legUpperBack.physicsBody?.affectedByGravity = false
         legUpperBack.physicsBody?.isDynamic = false
-        legUpperBack.physicsBody?.categoryBitMask = 0
-        legUpperBack.physicsBody?.collisionBitMask = 1
+        legUpperBack.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        legUpperBack.physicsBody?.collisionBitMask = bodyType.ground.rawValue
+
         
         
         //LEG BACK
@@ -198,15 +216,15 @@ class GameScene: SKScene {
         legLowerFront.physicsBody = SKPhysicsBody(texture: legLowerFront.texture!, size: legLowerFront.size)
         legLowerFront.physicsBody?.affectedByGravity = false
         legLowerFront.physicsBody?.isDynamic = false
-        legLowerFront.physicsBody?.categoryBitMask = 0
-        legLowerFront.physicsBody?.collisionBitMask = 1
+        legLowerFront.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        legLowerFront.physicsBody?.collisionBitMask = bodyType.ground.rawValue
         
         legLowerBack = legUpperBack.childNode(withName: "leg_lower_back") as! SKSpriteNode
         legLowerBack.physicsBody = SKPhysicsBody(texture: legLowerBack.texture!, size: legLowerBack.size)
         legLowerBack.physicsBody?.affectedByGravity = false
         legLowerBack.physicsBody?.isDynamic = false
-        legLowerBack.physicsBody?.categoryBitMask = 0
-        legLowerBack.physicsBody?.collisionBitMask = 1
+        legLowerBack.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
+        legLowerBack.physicsBody?.collisionBitMask = bodyType.ground.rawValue
 
     }
     
@@ -280,9 +298,11 @@ class GameScene: SKScene {
         woodenBox.physicsBody?.isDynamic = false
         woodenBox.physicsBody?.categoryBitMask = 1
         woodenBox.physicsBody?.collisionBitMask = 0
+        woodenBox.physicsBody?.contactTestBitMask = 0
         woodenBox.name = ("wooden_box")
         woodenBox.zPosition = -4
-        woodenBox?.position = CGPoint(x: 100, y: -146)
+        woodenBox.setScale(0.8)
+        woodenBox?.position = CGPoint(x: 100, y: -90)
         woodenBox.anchorPoint = CGPoint(x: 0, y: 0)
         scene?.addChild(woodenBox)
     }
@@ -331,7 +351,7 @@ class GameScene: SKScene {
         background.size = self.scene!.size
         background.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         background.position = CGPoint(x: 0, y:  0)
-        background.zPosition = -9
+        background.zPosition = -12
         
         self.addChild(background)
     }
@@ -343,14 +363,14 @@ class GameScene: SKScene {
             firstLayer.name = "1"
             firstLayer.size = self.scene!.size
             firstLayer.position = CGPoint(x: CGFloat(i) * self.scene!.size.width, y:  0)
-            firstLayer.zPosition = -8
+            firstLayer.zPosition = -11
             
             
             let secondLayer = SKSpriteNode(imageNamed:  designPack + "2")
             secondLayer.name = "2"
             secondLayer.size = self.scene!.size
             secondLayer.position = CGPoint(x: CGFloat(i) * self.scene!.size.width, y:  0)
-            secondLayer.zPosition = -7
+            secondLayer.zPosition = -10
             
             
             
@@ -358,21 +378,40 @@ class GameScene: SKScene {
             thirdLayer.name = "3"
             thirdLayer.size = self.scene!.size
             thirdLayer.position = CGPoint(x: CGFloat(i) * self.scene!.size.width, y:  0)
-            thirdLayer.zPosition = -6
+            thirdLayer.zPosition = -9
             
             
-            if (UIImage(named: designPack + "4") != nil){
-                let forthLayer = SKSpriteNode(imageNamed:  designPack + "4")
-                forthLayer.name = "4"
-                forthLayer.size = self.scene!.size
-                forthLayer.position = CGPoint(x: CGFloat(i) * self.scene!.size.width, y:  0)
-                forthLayer.zPosition = -5
-                self.addChild(forthLayer)
-            }
+            let forthLayer = SKSpriteNode(imageNamed:  designPack + "4")
+            forthLayer.name = "4"
+            forthLayer.size = self.scene!.size
+            forthLayer.position = CGPoint(x: CGFloat(i) * self.scene!.size.width, y:  0)
+            forthLayer.zPosition = -8
             
+            let fifthLayer = SKSpriteNode(imageNamed:  designPack + "5")
+            fifthLayer.name = "5"
+            fifthLayer.size = self.scene!.size
+            fifthLayer.position = CGPoint(x: CGFloat(i) * self.scene!.size.width, y:  0)
+            fifthLayer.zPosition = -7
+            
+            let sixtLayer = SKSpriteNode(imageNamed:  designPack + "6")
+            sixtLayer.name = "6"
+            sixtLayer.size = self.scene!.size
+            sixtLayer.position = CGPoint(x: CGFloat(i) * self.scene!.size.width, y:  0)
+            sixtLayer.zPosition = -6
+            
+            let seventhLayer = SKSpriteNode(imageNamed:  designPack + "7")
+            seventhLayer.name = "7"
+            seventhLayer.size = self.scene!.size
+            seventhLayer.position = CGPoint(x: CGFloat(i) * self.scene!.size.width, y:  0)
+            seventhLayer.zPosition = -5
+
+            self.addChild(forthLayer)
             self.addChild(thirdLayer)
             self.addChild(secondLayer)
             self.addChild(firstLayer)
+            self.addChild(sixtLayer)
+            self.addChild(fifthLayer)
+            self.addChild(seventhLayer)
         }
     }
     
@@ -388,7 +427,7 @@ class GameScene: SKScene {
         
         self.enumerateChildNodes(withName: "2", using: ({
             (node, error) in
-            node.position.x -= 0.4
+            node.position.x -= 0.2
             
             if node.position.x < -(self.scene!.size.width){
                 node.position.x += self.scene!.size.width * 3
@@ -397,7 +436,7 @@ class GameScene: SKScene {
         
         self.enumerateChildNodes(withName: "3", using: ({
             (node, error) in
-            node.position.x -= 1
+            node.position.x -= 0.4
             
             if node.position.x < -(self.scene!.size.width){
                 node.position.x += self.scene!.size.width * 3
@@ -405,6 +444,33 @@ class GameScene: SKScene {
         }))
         
         self.enumerateChildNodes(withName: "4", using: ({
+            (node, error) in
+            node.position.x -= 0.6
+            
+            if node.position.x < -(self.scene!.size.width){
+                node.position.x += self.scene!.size.width * 3
+            }
+        }))
+        
+        self.enumerateChildNodes(withName: "5", using: ({
+            (node, error) in
+            node.position.x -= 0.8
+            
+            if node.position.x < -(self.scene!.size.width){
+                node.position.x += self.scene!.size.width * 3
+            }
+        }))
+        
+        self.enumerateChildNodes(withName: "6", using: ({
+            (node, error) in
+            node.position.x -= 1.2
+            
+            if node.position.x < -(self.scene!.size.width){
+                node.position.x += self.scene!.size.width * 3
+            }
+        }))
+        
+        self.enumerateChildNodes(withName: "7", using: ({
             (node, error) in
             node.position.x -= 1.7
             
