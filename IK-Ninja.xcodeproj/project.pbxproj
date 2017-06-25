@@ -17,6 +17,8 @@
 		D90F6C7B19BC106100A203F4 /* bg.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D90F6C7819BC106100A203F4 /* bg.mp3 */; };
 		D90F6C7C19BC106100A203F4 /* hit.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D90F6C7919BC106100A203F4 /* hit.mp3 */; };
 		D90F6C7D19BC106100A203F4 /* miss.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = D90F6C7A19BC106100A203F4 /* miss.mp3 */; };
+		E2465FE81F0034750079F2AA /* Lost.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2465FE71F0034750079F2AA /* Lost.swift */; };
+		E24E351D1F002B2F00E02095 /* Lost.sks in Resources */ = {isa = PBXBuildFile; fileRef = E24E351C1F002B2F00E02095 /* Lost.sks */; };
 		EB85BF621C5FD719001ABE03 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB85BF601C5FD719001ABE03 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +35,8 @@
 		D90F6C7819BC106100A203F4 /* bg.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bg.mp3; sourceTree = "<group>"; };
 		D90F6C7919BC106100A203F4 /* hit.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = hit.mp3; sourceTree = "<group>"; };
 		D90F6C7A19BC106100A203F4 /* miss.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = miss.mp3; sourceTree = "<group>"; };
+		E2465FE71F0034750079F2AA /* Lost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lost.swift; sourceTree = "<group>"; };
+		E24E351C1F002B2F00E02095 /* Lost.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Lost.sks; sourceTree = "<group>"; };
 		EB85BF611C5FD719001ABE03 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,7 +74,9 @@
 				D90F6C7419BC105100A203F4 /* SKTUtils */,
 				D90F6C5319BC101200A203F4 /* AppDelegate.swift */,
 				D90F6C5519BC101200A203F4 /* GameScene.sks */,
+				E24E351C1F002B2F00E02095 /* Lost.sks */,
 				D90F6C5719BC101200A203F4 /* GameScene.swift */,
+				E2465FE71F0034750079F2AA /* Lost.swift */,
 				D90F6C5919BC101200A203F4 /* GameViewController.swift */,
 				D90F6C5B19BC101200A203F4 /* Main.storyboard */,
 				EB85BF601C5FD719001ABE03 /* LaunchScreen.storyboard */,
@@ -168,6 +174,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB85BF621C5FD719001ABE03 /* LaunchScreen.storyboard in Resources */,
+				E24E351D1F002B2F00E02095 /* Lost.sks in Resources */,
 				D90F6C5F19BC101200A203F4 /* Images.xcassets in Resources */,
 				D90F6C7B19BC106100A203F4 /* bg.mp3 in Resources */,
 				D90F6C7D19BC106100A203F4 /* miss.mp3 in Resources */,
@@ -184,6 +191,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2465FE81F0034750079F2AA /* Lost.swift in Sources */,
 				D90F6C5819BC101200A203F4 /* GameScene.swift in Sources */,
 				D90F6C5A19BC101200A203F4 /* GameViewController.swift in Sources */,
 				35F7AA2B1D9EBF19009C4036 /* CGFloat+Extensions.swift in Sources */,
