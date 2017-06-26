@@ -18,8 +18,11 @@ class Lost: SKScene{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if button.contains((touches.first?.location(in: self.button))!){
             button.texture = SKTexture(imageNamed: "red_button2")
-            let tempScene = GameScene(fileNamed: "GameScene")
-            self.view?.presentScene(tempScene!, transition: SKTransition.fade(withDuration: 1))
+            button.run(SKAction.wait(forDuration: 0.3)){
+                self.button.texture = SKTexture(imageNamed: "red_button1")
+                let tempScene = GameScene(fileNamed: "GameScene")
+                self.view?.presentScene(tempScene!, transition: SKTransition.fade(withDuration: 1))
+            }
         }
     }
     

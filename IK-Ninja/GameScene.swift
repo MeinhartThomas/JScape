@@ -55,16 +55,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let targetNode = SKSpriteNode()
     
     var timer = Timer()
-    
-    
-
 
     //OBSTACLES
     var woodenBox: SKSpriteNode!
     var projectile: SKSpriteNode!
-    
-   
-    
     
     //BOOLEANS
     var rightPunch = true
@@ -72,9 +66,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var isJumping = false
     var isSliding = false
-    
 
-    //industrial or mountain or city
+    //DesignPack
     let designPack = "city"
     
     enum bodyType: UInt32 {
@@ -94,22 +87,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func didMove(to view: SKView) {
-        
         self.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         physicsWorld.contactDelegate = self
         
-            createBackground()
-            createMovingLayers()
-            createNinja()
-            startRunningAnimation()
-            createGestureRecognizers()
-            
-        Timer.scheduledTimer(timeInterval: TimeInterval(4), target: self, selector: #selector(spawnBox), userInfo: nil, repeats: true);
-        Timer.scheduledTimer(timeInterval: TimeInterval(6), target: self, selector: #selector(spawnProjectile), userInfo: nil, repeats: true)
+        createBackground()
+        createMovingLayers()
+        createNinja()
+        startRunningAnimation()
+        createGestureRecognizers()
         
+        Timer.scheduledTimer(timeInterval: TimeInterval(6), target: self, selector: #selector(spawnBox), userInfo: nil, repeats: true);
+        Timer.scheduledTimer(timeInterval: TimeInterval(3), target: self, selector: #selector(intializeTimer), userInfo: nil, repeats: false)
     }
     
-
+    func intializeTimer(){
+        Timer.scheduledTimer(timeInterval: TimeInterval(6), target: self, selector: #selector(spawnProjectile), userInfo: nil, repeats: true)
+    }
     
     func didBegin(_ contact: SKPhysicsContact) {
         print("contact")
@@ -241,7 +234,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         legLowerBack.physicsBody?.isDynamic = false
         legLowerBack.physicsBody?.categoryBitMask = bodyType.ninja.rawValue
         legLowerBack.physicsBody?.collisionBitMask = bodyType.obstacle.rawValue
-
     }
     
     func startRunningAnimation() {
@@ -323,7 +315,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(projectile)
     }
     
-    
     func spawnBox(){
         woodenBox = SKSpriteNode(imageNamed: "wooden_box") 
         woodenBox.physicsBody = SKPhysicsBody(texture: woodenBox.texture!, size: woodenBox.size)
@@ -359,25 +350,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rightPunch = !rightPunch
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-       /* if !firstTouch {
-            for c in head.constraints! {
-                let constraint = c
-                constraint.enabled = true
-            }
-            firstTouch = true
-        }*/
-        
-        for touch: AnyObject in touches {
-            let location = touch.location(in: self)
-            
-            //lowerTorso.xScale = location.x < frame.midX ? abs(lowerTorso.xScale) * -1 : abs(lowerTorso.xScale)
-            punchAt(location)
-            targetNode.position = location
-
-        }
-    }
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        
+//       /* if !firstTouch {
+//            for c in head.constraints! {
+//                let constraint = c
+//                constraint.enabled = true
+//            }
+//            firstTouch = true
+//        }*/
+//        
+//        for touch: AnyObject in touches {
+//            let location = touch.location(in: self)
+//            
+//            //lowerTorso.xScale = location.x < frame.midX ? abs(lowerTorso.xScale) * -1 : abs(lowerTorso.xScale)
+//            punchAt(location)
+//            targetNode.position = location
+//
+//        }
+//    }
     
     func createBackground(){
         let background = SKSpriteNode(imageNamed: designPack + "0")
@@ -521,6 +512,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             if node.position.x < -(self.scene!.size.width){
                 node.removeFromParent()
+                
             }
         }))
         
@@ -543,7 +535,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 isSliding = false
                 resetNinja()
             }
-            prepareJump()
+            //prepareJump()
+            performJumpingMotion(0.2)
         }
     }
     
@@ -556,9 +549,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let rotation = SKAction.sequence([SKAction .rotate(toAngle: CGFloat(75).degreesToRadians(), duration: 0.5), .rotate(byAngle: 0, duration: 1)])
             let finishRotation = SKAction.rotate(toAngle: CGFloat(0).degreesToRadians(), duration: 0.5)
             
-            let groundTouch = SKAction.group([.moveTo(y: CGFloat(-112.5), duration: 0.35), rotation])
+            let groundTouch = SKAction.group([.moveTo(y: CGFloat(-80), duration: 0.35), rotation])
             let backToPositionGroup = SKAction.group([finishRotation, .moveTo(y: CGFloat(-55), duration: 0.35)])
-            let finalMove = SKAction.sequence([groundTouch, backToPositionGroup])
+            let wait = SKAction.wait(forDuration: 0.5)
+            let finalMove = SKAction.sequence([groundTouch,wait, backToPositionGroup])
             
             lowerTorso.run(finalMove) {
                 self.isSliding = false
@@ -603,25 +597,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func performJumpingMotion(_ animDuration: Double) {
-        // Body Movement while jumping
-        upperArmFront.run(SKAction.rotate(toAngle: CGFloat(100).degreesToRadians(), duration: animDuration))
-        lowerArmFront.run(SKAction.rotate(toAngle: CGFloat(45).degreesToRadians(), duration: animDuration))
+//        let aniUpperArmFront = SKAction.rotate(toAngle: CGFloat(100).degreesToRadians(), duration: animDuration)
+//        let aniLowerArmFront = SKAction.rotate(toAngle: CGFloat(45).degreesToRadians(), duration: animDuration)
+//        let aniUpperArmBack = SKAction.rotate(toAngle: CGFloat(105).degreesToRadians(), duration: animDuration)
+//        let aniLowerArmBack = SKAction.rotate(toAngle: CGFloat(45).degreesToRadians(), duration: animDuration)
         
-        upperArmBack.run(SKAction.rotate(toAngle: CGFloat(105).degreesToRadians(), duration: animDuration))
-        lowerArmBack.run(SKAction.rotate(toAngle: CGFloat(45).degreesToRadians(), duration: animDuration)) {
+        
+        
             // Moving the character upwards and back down again
-            let upMotion = SKAction.moveBy(x: 0, y: 40, duration: 0.1)
-            let highPoint = SKAction.moveBy(x: 0, y: 50, duration: 0.3)
-            let highestPoint = SKAction.moveBy(x: 0, y: 0, duration: 0.5)
-            let downMotion = SKAction.moveBy(x: 0, y: -90, duration: 0.5)
+            let upMotion = SKAction.moveBy(x: 0, y: 50, duration: 0.1)
+            let highPoint = SKAction.moveBy(x: 0, y: 60, duration: 0.3)
+            let highestPoint = SKAction.moveBy(x: 0, y: 0, duration: 1.5)
+            let downMotion = SKAction.moveBy(x: 0, y: -110, duration: 0.5)
+        
             let jumpingMotion = SKAction.sequence([upMotion, highPoint, highestPoint, downMotion])
+    
             
             self.lowerTorso.run(jumpingMotion) {
                 self.isJumping = false
                 self.resetNinja()
                 self.startRunningAnimation()
             }
-        }
+        
     }
     
     func removeActions() {
